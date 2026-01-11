@@ -9,11 +9,24 @@
 
         <div id="region" class=" border p-4 rounded">
                 <h2 class="text-center">Select a Region</h2>
-                <div class="container mt-4">
+                <div class="container mt-4 dropdown">
+
                     <div class="d-flex justify-content-center">
-                        <input type ="text" id="region-input" class="form-control mb-3" placeholder="Enter region name..." />
-                        <input type="button" id="region-button" class="btn btn-primary mb-3" value="Find Stops" />
+                        
+                        <div class="container mb-3">
+                            <div class="dropdown">
+                                <input type="text" id="region-input" class="form-control dropdown-toggle" placeholder="Enter region name..." data-bs-toggle="dropdown" aria-expanded="true" autocomplete="off"/>
+
+                                <ul id="region-list" class="dropdown-menu w-100" aria-labelledby="region-input">
+                                    <!-- Dynamic region options will be added here -->
+                                </ul>
+                            </div>
+                        </div>
+
+                        <input type="button" id="region-button" class="btn btn-primary mb-3" value="Find Stops"/>
+                    
                     </div>
+
                 <div id="response" class="alert alert-info my-4 d-none"></div>    
             </div>
         </div>
@@ -23,11 +36,24 @@
         <div id="bus-stop" class=" border p-4 rounded">
                 <h2 class="text-center">Select a Buss Stop</h2>
                 <div class="container mt-4">
+
                     <div class="d-flex justify-content-center">
-                        <input type ="text" id="buss-stop-input" class="form-control mb-3" placeholder="Enter bus stop name..." />
+
+                        <div class="container mb-3">
+                            <div class="dropdown">
+                                <input type="text" id="buss-stop-input" class="form-control dropdown-toggle" placeholder="Enter bus stop name..." data-bs-toggle="dropdown" aria-expanded="true" autocomplete="off"/>
+
+                                <ul id="buss-stop-list" class="dropdown-menu w-100" aria-labelledby="buss-stop-input">
+                                    <!-- Dynamic bus stop options will be added here -->
+                                </ul>
+                            </div>
+                        </div>
+
                         <input type="button" id="buss-stop-button" class="btn btn-primary mb-3" value="Find Buses" />
+                    
                     </div>
-                <div id="response" class="alert alert-info my-4 d-none"></div>    
+
+                <div id="response" class="alert alert-info my-4 d-none"></div>   
             </div>
         </div>
 
@@ -50,5 +76,6 @@
     </p>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="frontend.js"></script>    
 </html>
