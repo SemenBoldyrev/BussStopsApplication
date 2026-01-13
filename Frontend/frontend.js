@@ -1,3 +1,5 @@
+const backend = require("../Backend/Backend.js");
+
 const regionInput = document.getElementById("region-input");
 const regionButton = document.getElementById("region-button");
 const regionsList = document.getElementById("regions-list");
@@ -11,6 +13,7 @@ const busTimesDiv = document.getElementById("buses-times-list");
 
 var tRegions = ["Region A", "Region B", "Region C"];
 var tBusStops = ["Stop 1", "Stop 2", "Stop 3"];
+
 
 regionButton.addEventListener("click", () => {
     console.log("Region button clicked");
