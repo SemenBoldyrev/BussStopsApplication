@@ -21,7 +21,12 @@ const busStopLabel = document.getElementById("selected-bus-stop");
 const clearButton = document.getElementById("clear-button");
 const infoHead = document.getElementById("infoHead");
 
+const date = new Date();
+const curDate = date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0') + ":" + date.getSeconds().toString().padStart(2, '0');
 const busIcon = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-bus-front-fill\" viewBox=\"0 0 16 16\"><path d=\"M16 7a1 1 0 0 1-1 1v3.5c0 .818-.393 1.544-1 2v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5V14H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2a2.5 2.5 0 0 1-1-2V8a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1V2.64C1 1.452 1.845.408 3.064.268A44 44 0 0 1 8 0c2.1 0 3.792.136 4.936.268C14.155.408 15 1.452 15 2.64V4a1 1 0 0 1 1 1zM3.552 3.22A43 43 0 0 1 8 3c1.837 0 3.353.107 4.448.22a.5.5 0 0 0 .104-.994A44 44 0 0 0 8 2c-1.876 0-3.426.109-4.552.226a.5.5 0 1 0 .104.994M8 4c-1.876 0-3.426.109-4.552.226A.5.5 0 0 0 3 4.723v3.554a.5.5 0 0 0 .448.497C4.574 8.891 6.124 9 8 9s3.426-.109 4.552-.226A.5.5 0 0 0 13 8.277V4.723a.5.5 0 0 0-.448-.497A44 44 0 0 0 8 4m-3 7a1 1 0 1 0-2 0 1 1 0 0 0 2 0m8 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m-7 0a1 1 0 0 0 1 1h2a1 1 0 1 0 0-2H7a1 1 0 0 0-1 1\"/></svg>"
+
+//database hate this symbols, so i check for them (may be should  be in backend)
+const banSym = ["'",'"']
 
 var tRegions = ["Region A", "Region B", "Region C"];
 var tBusStops = ["Stop 1", "Stop 2", "Stop 3"];
@@ -38,7 +43,7 @@ regionButton.addEventListener("click", () => {
         if (exists) {
             infoHead.textContent = " ";
             selectedRegion = regionName;
-            regionLabel.textContent = regionName;
+            regionLabel.textContent = " " + regionName;
             console.log(`Searching for bus stops in ${regionName}...`);
             MainVisController(true, true, false);
         } else {
@@ -58,7 +63,7 @@ busStopButton.addEventListener("click", () => {
         if (exists) {
             infoHead.textContent = " ";
             selectedBusStop = busStopName;
-            busStopLabel.textContent = busStopName;
+            busStopLabel.textContent = " " + busStopName;
             console.log(`Searching for buses at ${busStopName}...`);
             thirdContainer.style.display = "block";
             //
@@ -288,10 +293,10 @@ async function UpdateBusTimes(routeLongName)
         const label = document.createElement("label");
         label.style.border = "1px solid #ccc";
         label.style.padding = "10px";
-        label.style.width = "125px";
+        label.style.width = "inherit";
         label.disabled = true;
 
-        label.classList.add("btn", "btn-primary", "mb-3", "pe-none");
+        label.classList.add("btn", "btn-danger", "mb-3", "pe-none");
         label.ariaDisabled = "true";
 
         label.innerHTML = `No Bus Times Found`;
@@ -317,12 +322,12 @@ function CreateBusButton(route)
         button.style.cursor = "pointer";
         button.style.border = "1px solid #ccc";
         button.style.padding = "10px";
-        button.style.width = "125px";
+        button.style.width = "inherit";
         //button.style.textAlign = "left";
 
         button.classList.add("btn", "btn-primary", "mb-3");
 
-        button.innerHTML = `${busIcon} ${route.route_short_name}`;
+        button.innerHTML = `${busIcon} ${route.route_short_name}<br>${route.route_long_name}`;
         busListDiv.appendChild(button);
 }
 
@@ -333,11 +338,27 @@ function CreateBusTimesButton(stopTime)
     label.style.padding = "10px";
     label.style.width = "125px";
     label.disabled = true;
+    label.style.width = "inherit";
     //label.style.textAlign = "left";
 
     label.classList.add("btn", "btn-primary", "mb-3", "pe-none");
     label.ariaDisabled = "true";
 
-    label.innerHTML = `Arrival : ${stopTime.arrival_time}<br>Departure : ${stopTime.departure_time}`;
+    
+    if (AisHigherThenBTime(curDate, stopTime.departure_time)) {
+        label.innerHTML = `[Tomorrow]<br>Arrival : ${stopTime.arrival_time}<br>Departure : ${stopTime.departure_time}`;
+    } else {
+        label.innerHTML = `[Today]<br>Arrival : ${stopTime.arrival_time}<br>Departure : ${stopTime.departure_time}`;
+    }
+    
     busTimesDiv.appendChild(label);
+}
+
+function AisHigherThenBTime(a, b)
+{
+    console.log(`Comparing times ${a} and ${b}`);
+    const aParts = Number(a.split(":").join("")); 
+    const bParts = Number(b.split(":").join(""));
+    return aParts > bParts
+
 }

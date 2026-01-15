@@ -48,42 +48,42 @@ app.get('/stops', (req, res) => {
 app.get('/stops/region/:rname', (req, res) => {
     const regionName = req.params.rname;
     const query = `SELECT * FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}%' LIMIT ${LIMIT}`;
-    SendRequest(query, res);
+    if (AbsCheck(regionName)){SendRequest(query, res);}
 });
 
 app.get('/stops/region/:rname/stop/:sname', (req, res) => {
     const regionName = req.params.rname;
     const stopName = req.params.sname;
     const query = `SELECT * FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}%' AND stop_name like '${stopName}%' LIMIT ${LIMIT}`;
-    SendRequest(query, res);
+    if (AbsCheck(regionName) && AbsCheck(stopName)){SendRequest(query, res);}
 });
 
 
 app.get('/stops/uniqueregion/region/:rname', (req, res) => {
     const regionName = req.params.rname;
     const query = `SELECT DISTINCT stop_area FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}%' LIMIT ${LIMIT}`;
-    SendRequest(query, res);
+    if (AbsCheck(regionName)){SendRequest(query, res);}
 });
 
 app.get('/stops/uniquestop/region/:rname/stop/:sname', (req, res) => {
     const regionName = req.params.rname;
     const stopName = req.params.sname;
     const query = `SELECT DISTINCT stop_name FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}%' AND stop_name like '${stopName}%' LIMIT ${LIMIT}`;
-    SendRequest(query, res);
+    if (AbsCheck(regionName) && AbsCheck(stopName)){SendRequest(query, res);}
 });
 
 
 app.get('/stops/strict/region/:rname', (req, res) => {
     const regionName = req.params.rname;
     const query = `SELECT DISTINCT stop_area FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}' LIMIT ${LIMIT}`;
-    SendRequest(query, res);
+    if (AbsCheck(regionName)){SendRequest(query, res);}
 });
 
 app.get('/stops/strict/region/:rname/stop/:sname', (req, res) => {
     const regionName = req.params.rname;
     const stopName = req.params.sname;
     const query = `SELECT DISTINCT stop_name FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}' AND stop_name like '${stopName}' LIMIT ${LIMIT}`;
-    SendRequest(query, res);
+    if (AbsCheck(regionName) && AbsCheck(stopName)){SendRequest(query, res);}
 });
 
 
@@ -96,7 +96,7 @@ app.get('/trips', (req, res) => {
 app.get('/trips/longname/:longname', (req, res) => {
     const longName = req.params.longname;
     const query = `SELECT * FROM ${DatabaseNames.TRIPS} WHERE trip_long_name like '%${longName}%' LIMIT ${LIMIT}`;
-    SendRequest(query, res);
+    if (AbsCheck(longName)){SendRequest(query, res);}
 });
 
 
@@ -109,7 +109,7 @@ app.get('/stop_times', (req, res) => {
 app.get('/stop_times/tripid/:tripid', (req, res) => {
     const tripId = req.params.tripid;
     const query = `SELECT * FROM ${DatabaseNames.STOP_TIMES} WHERE trip_id = ${tripId} LIMIT ${LIMIT}`;
-    SendRequest(query, res);
+    if (AbsCheck(tripId)){SendRequest(query, res);}
 });
 
 
@@ -122,16 +122,20 @@ app.get('/routes', (req, res) => {
 app.get('/routes/longname/:longname', (req, res) => {
     const longName = req.params.longname;
     const query = `SELECT * FROM ${DatabaseNames.ROUTES} WHERE route_long_name like '%${longName}%' LIMIT ${LIMIT}`;
-    SendRequest(query, res);
+    if (AbsCheck(longName)){SendRequest(query, res);}
 });
 
 app.get('/routes/nonend/longname/:longname', (req, res) => {
     const longName = req.params.longname;
-    const query = `SELECT * FROM ${DatabaseNames.ROUTES} WHERE route_long_name like '%${longName}_%' LIMIT ${LIMIT}`;
-    SendRequest(query, res);
+    const query = `SELECT * FROM ${DatabaseNames.ROUTES} WHERE route_long_name like '%${longName} %' LIMIT ${LIMIT}`;
+    if (AbsCheck(longName)){SendRequest(query, res);}
 });
 
-//
+//so database wont die
+function AbsCheck(str)
+{
+    return str.match(/[|\\/~^:,;?!&%$@*+'"]/) == null;
+}
 
 function SendRequest(sql, res) 
 {
