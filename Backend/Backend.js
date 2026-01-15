@@ -2,6 +2,8 @@ const DatabaseNames = require('./DatabaseNames.js');
 const mysql = require('mysql');
 const express = require('express');
 
+const LIMIT = 10;
+
 const con = mysql.createConnection({
     host: "d26893.mysql.zonevs.eu",
     user: "d26893_busstops",
@@ -11,7 +13,7 @@ const con = mysql.createConnection({
 
 con.connect(function(err) {
   if (err) throw err;
-  console.log("Connecting to database...");
+  console.log("Connected to database!");
 
 });
 
@@ -36,10 +38,99 @@ app.get('/', (req, res) => {
     res.send('Sample page');
 });
 
+
+
 app.get('/stops', (req, res) => {
-    const query = `SELECT * FROM ${DatabaseNames.STOPS} LIMIT 100`;
+    const query = `SELECT * FROM ${DatabaseNames.STOPS} LIMIT ${LIMIT}`;
     SendRequest(query, res);
 });
+
+app.get('/stops/region/:rname', (req, res) => {
+    const regionName = req.params.rname;
+    const query = `SELECT * FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}%' LIMIT ${LIMIT}`;
+    SendRequest(query, res);
+});
+
+app.get('/stops/region/:rname/stop/:sname', (req, res) => {
+    const regionName = req.params.rname;
+    const stopName = req.params.sname;
+    const query = `SELECT * FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}%' AND stop_name like '${stopName}%' LIMIT ${LIMIT}`;
+    SendRequest(query, res);
+});
+
+
+app.get('/stops/uniqueregion/region/:rname', (req, res) => {
+    const regionName = req.params.rname;
+    const query = `SELECT DISTINCT stop_area FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}%' LIMIT ${LIMIT}`;
+    SendRequest(query, res);
+});
+
+app.get('/stops/uniquestop/region/:rname/stop/:sname', (req, res) => {
+    const regionName = req.params.rname;
+    const stopName = req.params.sname;
+    const query = `SELECT DISTINCT stop_name FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}%' AND stop_name like '${stopName}%' LIMIT ${LIMIT}`;
+    SendRequest(query, res);
+});
+
+
+app.get('/stops/strict/region/:rname', (req, res) => {
+    const regionName = req.params.rname;
+    const query = `SELECT DISTINCT stop_area FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}' LIMIT ${LIMIT}`;
+    SendRequest(query, res);
+});
+
+app.get('/stops/strict/region/:rname/stop/:sname', (req, res) => {
+    const regionName = req.params.rname;
+    const stopName = req.params.sname;
+    const query = `SELECT DISTINCT stop_name FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}' AND stop_name like '${stopName}' LIMIT ${LIMIT}`;
+    SendRequest(query, res);
+});
+
+
+
+app.get('/trips', (req, res) => {
+    const query = `SELECT * FROM ${DatabaseNames.TRIPS} LIMIT ${LIMIT}`;
+    SendRequest(query, res);
+});
+
+app.get('/trips/longname/:longname', (req, res) => {
+    const longName = req.params.longname;
+    const query = `SELECT * FROM ${DatabaseNames.TRIPS} WHERE trip_long_name like '%${longName}%' LIMIT ${LIMIT}`;
+    SendRequest(query, res);
+});
+
+
+
+app.get('/stop_times', (req, res) => {
+    const query = `SELECT * FROM ${DatabaseNames.STOP_TIMES} LIMIT ${LIMIT}`;
+    SendRequest(query, res);
+});
+
+app.get('/stop_times/tripid/:tripid', (req, res) => {
+    const tripId = req.params.tripid;
+    const query = `SELECT * FROM ${DatabaseNames.STOP_TIMES} WHERE trip_id = ${tripId} LIMIT ${LIMIT}`;
+    SendRequest(query, res);
+});
+
+
+
+app.get('/routes', (req, res) => {
+    const query = `SELECT * FROM ${DatabaseNames.ROUTES} LIMIT ${LIMIT}`;
+    SendRequest(query, res);
+});
+
+app.get('/routes/longname/:longname', (req, res) => {
+    const longName = req.params.longname;
+    const query = `SELECT * FROM ${DatabaseNames.ROUTES} WHERE route_long_name like '%${longName}%' LIMIT ${LIMIT}`;
+    SendRequest(query, res);
+});
+
+app.get('/routes/nonend/longname/:longname', (req, res) => {
+    const longName = req.params.longname;
+    const query = `SELECT * FROM ${DatabaseNames.ROUTES} WHERE route_long_name like '%${longName}_%' LIMIT ${LIMIT}`;
+    SendRequest(query, res);
+});
+
 //
 
 function SendRequest(sql, res) 
