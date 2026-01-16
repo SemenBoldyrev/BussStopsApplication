@@ -75,17 +75,23 @@ app.get('/stops/uniquestop/region/:rname/stop/:sname', (req, res) => {
 
 app.get('/stops/strict/region/:rname', (req, res) => {
     const regionName = req.params.rname;
-    const query = `SELECT DISTINCT stop_area FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}' LIMIT ${LIMIT}`;
+    const query = `SELECT * FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}' LIMIT ${LIMIT}`;
     if (AbsCheck(regionName)){SendRequest(query, res);}
 });
 
 app.get('/stops/strict/region/:rname/stop/:sname', (req, res) => {
     const regionName = req.params.rname;
     const stopName = req.params.sname;
-    const query = `SELECT DISTINCT stop_name FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}' AND stop_name like '${stopName}' LIMIT ${LIMIT}`;
+    const query = `SELECT * FROM ${DatabaseNames.STOPS} WHERE stop_area like '${regionName}' AND stop_name like '${stopName}' LIMIT ${LIMIT}`;
     if (AbsCheck(regionName) && AbsCheck(stopName)){SendRequest(query, res);}
 });
 
+app.get('/stops/geoloc/:lon/:lat', (req, res) => {
+    const longitude = req.params.lon;
+    const latitude = req.params.lat;
+    const query = `SELECT * FROM ${DatabaseNames.STOPS} ORDER BY abs( stop_lat - ${latitude} ) + abs( stop_lon - ${longitude} ) LIMIT 1`;
+    SendRequest(query, res);
+});
 
 
 app.get('/trips', (req, res) => {
