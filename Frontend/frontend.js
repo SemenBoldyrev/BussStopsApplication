@@ -1,4 +1,5 @@
-const SERVER = "http://localhost:8000";
+//const SERVER = "http://localhost:8000";
+const SERVER = "https://bussstopsapplication.onrender.com";
 
 const firstContainer = document.getElementById("region");
 const secondContainer = document.getElementById("bus-stop");
@@ -35,6 +36,12 @@ var tBusStops = ["Stop 1", "Stop 2", "Stop 3"];
 
 var selectedRegion = null;
 var selectedBusStop = null;
+
+document.addEventListener("DOMContentLoaded", () =>{
+});
+
+document.addEventListener("close", () =>{
+});
 
 
 regionButton.addEventListener("click", () => {
