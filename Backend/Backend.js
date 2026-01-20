@@ -2,14 +2,15 @@ const DatabaseNames = require('./DatabaseNames.js');
 const mysql = require('mysql');
 const express = require('express');
 
+const port = 8000;
 const LIMIT = 10;
 
-const con = mysql.createConnection({
-    host: "d26893.mysql.zonevs.eu",
-    user: "d26893_busstops",
-    password: "3w7PYquFJhver0!KdOfF",
-    database: "d26893_busstops"
-});
+//const con = mysql.createConnection({
+//    host: "d26893.mysql.zonevs.eu",
+//    user: "d26893_busstops",
+//    password: "3w7PYquFJhver0!KdOfF",
+//    database: "d26893_busstops"
+//});
 
 con.connect(function(err) {
   if (err) throw err;
@@ -27,8 +28,8 @@ app.use((req, res, next) => {
     next();
 });
 
-app.listen(8000, () => {
-    console.log("Server running at http://localhost:8000/");
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}/`);
 });
 
 //
