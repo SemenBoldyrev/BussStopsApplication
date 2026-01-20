@@ -12,10 +12,10 @@ const LIMIT = 10;
 //    database: "d26893_busstops"
 //});
 
-con.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected to database!");
-});
+//con.connect(function(err) {
+//  if (err) throw err;
+//  console.log("Connected to database!");
+//});
 
 const app = express();
 
