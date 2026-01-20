@@ -1,21 +1,18 @@
 const DatabaseNames = require('./DatabaseNames.js');
 const mysql = require('mysql');
+const sqlite3 = require('sqlite3').verbose();
 const express = require('express');
 
 const port = 8000;
 const LIMIT = 10;
 
-//const con = mysql.createConnection({
-//    host: "d26893.mysql.zonevs.eu",
-//    user: "d26893_busstops",
-//    password: "3w7PYquFJhver0!KdOfF",
-//    database: "d26893_busstops"
-//});
-
-//con.connect(function(err) {
-//  if (err) throw err;
-//  console.log("Connected to database!");
-//});
+const con = new sqlite3.Database('./Data/DBTables/BusStopsDB.sqlite', (err) => {
+    if (err) {
+        console.error("Could not connect to SQLite file:", err.message);
+    } else {
+        console.log("Connected to local SQLite file!");
+    }
+});
 
 const app = express();
 
@@ -145,7 +142,7 @@ function AbsCheck(str)
 
 function SendRequest(sql, res) 
 {
-    con.query(sql, function (err, result) {
+    con.all(sql, function (err, result) {
         if (err) throw err;
         res.json(result);
     });
