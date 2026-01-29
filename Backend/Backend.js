@@ -130,7 +130,7 @@ app.get('/routes/longname/:longname', (req, res) => {
 
 app.get('/routes/nonend/longname/:longname', (req, res) => {
     const longName = req.params.longname;
-    const query = `SELECT * FROM ${DatabaseNames.ROUTES} WHERE route_long_name like '%- ${longName} -%' OR route_long_name like '%${longName} -%' LIMIT ${LIMIT}`;
+    const query = `SELECT * FROM ${DatabaseNames.ROUTES} WHERE route_long_name like '%${longName} %' LIMIT ${LIMIT}`;
     if (AbsCheck(longName)){SendRequest(query, res);}
 });
 
