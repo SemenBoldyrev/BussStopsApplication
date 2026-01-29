@@ -265,7 +265,8 @@ async function UpdateBusButton()
     busTimesDiv.innerHTML = "";
     if (!selectedRegion || !selectedBusStop) { return; }
 
-    const response = await fetch(`${SERVER}/routes/nonend/longname/${selectedBusStop}`);
+    //const response = await fetch(`${SERVER}/routes/nonend/longname/${selectedRegion}`);
+    const response = await fetch(`${SERVER}/routes/nonend/longname/${selectedRegion}`);
     const data = await response.json();
     if (data.length == 0) 
     { 
