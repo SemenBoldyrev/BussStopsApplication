@@ -289,7 +289,7 @@ async function UpdateBusButton()
         return;
     }
 
-    console.log("Updating bus buttons...");
+    console.log("aaaaaUpdating bus buttons...");
 
     stopId = tmpdata[0].stop_id;
     console.log(`Identified stop ID: ${stopId}`);
