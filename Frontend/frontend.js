@@ -354,7 +354,7 @@ function CreateBusButton(trip,route)
         //button.style.textAlign = "left";
 
         button.classList.add("btn", "btn-primary", "mb-3");
-
+        console.log("AAAAB");
         button.innerHTML = `${busIcon} ${route.route_short_name}<br>${trip.trip_long_name}`;
         busListDiv.appendChild(button);
 }
