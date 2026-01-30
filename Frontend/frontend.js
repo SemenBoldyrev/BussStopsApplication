@@ -331,7 +331,7 @@ async function UpdateBusButton()
                 CreateBusButton(tmpstopid, tripgroup, route);
             }
         
-        if (tripgroup == tripData[0])
+        if (tripgroup == tripData[tripData.length - 1])
         {
             if (created == false) 
             { 
@@ -345,7 +345,7 @@ async function UpdateBusButton()
                 label.ariaDisabled = "true";
 
                 label.innerHTML = `No Busses Found`;
-                busTimesDiv.appendChild(label);
+                busListDiv.appendChild(label);
                 return;
             }
         }
