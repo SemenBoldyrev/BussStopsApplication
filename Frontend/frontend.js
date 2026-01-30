@@ -312,6 +312,7 @@ async function UpdateBusButton()
             const busTimesData =  busTimesResponse.json();
             if (busTimesData.length != 0) 
             { 
+                console.log(`Found matching trip: ${tripgroup.trip_long_name}`);
                 trip = tripgroup;
             }
         });////
