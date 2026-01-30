@@ -298,11 +298,11 @@ async function UpdateBusButton()
     });
 }
 
-async function UpdateBusTimes(routeLongName)
+async function UpdateBusTimes(routeLongId)
 {
 
     busTimesDiv.innerHTML = "";
-    const tmpresponse = await fetch(`${SERVER}/trips/rid/${routeLongName}`);
+    const tmpresponse = await fetch(`${SERVER}/trips/rid/${routeLongId}`);
     const tmpdata = await tmpresponse.json();
 
     if (tmpdata.length == 0) { return; }
@@ -339,7 +339,7 @@ function CreateBusButton(route)
         const button = document.createElement("button");
         button.onclick = () => {
             console.log(`Bus route ${route.route_short_name} selected`);
-            UpdateBusTimes(route.route_long_name);
+            UpdateBusTimes(route.route_id);
         }
         button.style.cursor = "pointer";
         button.style.border = "1px solid #ccc";
