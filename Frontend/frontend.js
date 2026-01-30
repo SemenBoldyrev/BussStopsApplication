@@ -307,7 +307,6 @@ async function UpdateBusButton()
         const busRoutesData = await busRoutesResponse.json();
 
         var tmpstopid = 0;
-        var gate = false;
 
         var stopid = stopId[0];
 
@@ -324,7 +323,6 @@ async function UpdateBusButton()
                 console.log("Creating bus button...");
                 var route = busRoutesData[0];
                 CreateBusButton(tmpstopid, tripgroup, route);
-                gate = true;
             }
         
     });
