@@ -319,7 +319,7 @@ async function UpdateBusTimes(tripid)
 
     busTimesDiv.innerHTML = "";
 
-    const response = await fetch(`${SERVER}/stop_times/tripid/${tripid}`);
+    const response = await fetch(`${SERVER}/stop_times/tripid/${tripid}/stopid/${stopId}`);
     const data = await response.json();
 
     if (data.length == 0) 
