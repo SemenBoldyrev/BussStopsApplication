@@ -313,10 +313,9 @@ async function UpdateBusButton()
             if (busTimesData.length != 0) 
             { 
                 trip = tripgroup;
-                console.log(`Found trip ${trip.trip_long_name} for stop ID ${stopid}`);
             }
         });////
-        console.log(busRoutesData.length != 0, trip != null);
+        console.log(busRoutesData.length != 0, trip !== null);
         if (busRoutesData.length != 0 && trip != null) 
             { 
                 console.log("Creating bus button...");
