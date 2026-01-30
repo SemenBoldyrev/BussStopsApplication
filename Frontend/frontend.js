@@ -76,7 +76,7 @@ busStopButton.addEventListener("click", () => {
     const busStopName = busStopInput.value;
     RedactRegionName(selectedRegion);
 
-    busStopExists(redactedRegionName).then(exists => {
+    busStopExists(busStopName).then(exists => {
         if (exists) {
             infoHead.textContent = " ";
             selectedBusStop = busStopName;
