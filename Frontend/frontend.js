@@ -311,13 +311,13 @@ async function UpdateBusButton()
             const busTimesResponse = await fetch(`${SERVER}/stop_times/tripid/${tripgroup.trip_id}/stopid/${stopid}`);
             const busTimesData = await busTimesResponse.json();
             console.log(busTimesData.length != 0);
-            if (busTimesData.length != 0) 
+            if (busTimesData.length !== 0) 
             { 
                 trip = tripgroup;
             }
         });////
-        console.log(busRoutesData.length != 0 && trip != null);
-        if (busRoutesData.length != 0 && trip != null) 
+        console.log(busRoutesData.length !== 0 && trip !== null);
+        if (busRoutesData.length !== 0 && trip !== null) 
             { 
                 var route = busRoutesData[0];
                 CreateBusButton(trip, route);
