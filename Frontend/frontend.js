@@ -294,7 +294,7 @@ async function UpdateBusButton()
 
     console.log("Updating bus buttons...");
 
-    stopId = tmpdata[tmpdata.length - 1].stop_id;
+    stopId = tmpdata[0].stop_id;
     console.log(`Identified stop ID: ${stopId}`);
     tripData.forEach(async tripgroup => {
         var trip = tripgroup;
