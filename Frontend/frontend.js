@@ -271,8 +271,9 @@ async function UpdateBusButton()
 
     if (tmpdata.length == 0) { return; }
 
-    const response = await fetch(`${SERVER}/routes/nonend/longname/${selectedBusStop}`);
+    const response = await fetch(`${SERVER}/trips/longname/unique/${selectedBusStop}`);
     const data = await response.json();
+
     if (data.length == 0) 
     { 
         const label = document.createElement("label");
@@ -293,7 +294,8 @@ async function UpdateBusButton()
 
     stopId = tmpdata[tmpdata.length - 1].stop_id;
     console.log(`Identified stop ID: ${stopId}`);
-    data.forEach(route => {
+    data.forEach(trip => {
+        var route = busRoutesData.
         CreateBusButton(route);
     });
 }
@@ -329,8 +331,10 @@ async function UpdateBusTimes(routeLongId)
     console.log("Updating bus times...");
     //for confidencce
     busTimesDiv.innerHTML = "";
-    data.forEach(trip => {
-        CreateBusTimesButton(trip);
+    data.forEach(async trip => {
+        const busRoutesResponsse = await fetch(`${SERVER}/routes/rid/${trip.route_id}`);
+        const busRoutesData = await busRoutesResponsse.json();
+        if (busRoutesData.length != 0) { CreateBusTimesButton(trip); }
     });
 }
 
