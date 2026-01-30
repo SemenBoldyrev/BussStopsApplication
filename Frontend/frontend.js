@@ -315,14 +315,15 @@ async function UpdateBusButton()
                 console.log(`Found matching trip: ${tripgroup.trip_long_name}`);
                 tmpstopid = stopid;
             }
-        });////
-        console.log(busRoutesData.length, tmpstopid);
-        if (busRoutesData.length != 0 && tmpstopid != 0) 
+            console.log(busRoutesData.length, tmpstopid);
+            if (busRoutesData.length != 0 && tmpstopid != 0) 
             { 
                 console.log("Creating bus button...");
                 var route = busRoutesData[0];
                 CreateBusButton(tmpstopid, tripgroup, route);
             }
+        });////
+        
         
     });
 }
