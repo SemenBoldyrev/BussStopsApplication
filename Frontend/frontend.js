@@ -308,15 +308,18 @@ async function UpdateBusButton()
 
         var tmpstopid = 0;
 
-        var stopid = stopId[0];
-
-        const busTimesResponse =  await fetch(`${SERVER}/stop_times/tripid/${tripgroup.trip_id}/stopid/${stopid}`);
-        const busTimesData = await busTimesResponse.json();
-        if (busTimesData.length != 0) 
-        { 
-            console.log(`Found matching trip: ${tripgroup.trip_long_name}`);
-            tmpstopid = stopid;
+        for (const stopid of stopId)
+        {
+            const busTimesResponse =  await fetch(`${SERVER}/stop_times/tripid/${tripgroup.trip_id}/stopid/${stopid}`);
+            const busTimesData = await busTimesResponse.json();
+            if (busTimesData.length != 0) 
+            { 
+                console.log(`Found matching stop time for stop ID: ${stopid}`);
+                tmpstopid = stopid;
+                break;
+            }
         }
+
             console.log(busRoutesData.length, tmpstopid);
             if (busRoutesData.length != 0 && tmpstopid != 0) 
             { 
