@@ -276,22 +276,6 @@ async function UpdateBusButton()
     const tripResponse = await fetch(`${SERVER}/trips/longname/unique/${redactedRegionName}`);
     const tripData = await tripResponse.json();
 
-    if (tripData.length == 0) 
-    { 
-        const label = document.createElement("label");
-        label.style.border = "1px solid #ccc";
-        label.style.padding = "10px";
-        label.style.width = "125px";
-        label.disabled = true;
-
-        label.classList.add("btn", "btn-primary", "mb-3", "pe-none");
-        label.ariaDisabled = "true";
-
-        label.innerHTML = `No Busses Found`;
-        busTimesDiv.appendChild(label);
-        return;
-    }
-
     console.log("Updating bus buttons...");
 
     var busStopsList = [];
