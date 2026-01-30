@@ -104,7 +104,11 @@ app.get('/trips/longname/:longname', (req, res) => {
 
 app.get('/trips/longname/unique/:longname', (req, res) => {
     const longName = req.params.longname;
-    const query = `SELECT * DISTINCT trip_long_name FROM ${DatabaseNames.TRIPS} WHERE trip_long_name like '%${longName} -%' OR trip_long_name like '%- ${longName} -%' LIMIT ${LIMIT}`;
+    const query = `SELECT * FROM ${DatabaseNames.TRIPS} 
+ WHERE trip_long_name LIKE '%${longName} -%' 
+   OR trip_long_name LIKE '%- ${longName} -%' 
+ GROUP BY trip_long_name
+ LIMIT ${LIMIT}`;
     if (AbsCheck(longName)){SendRequest(query, res);}
 });
 
