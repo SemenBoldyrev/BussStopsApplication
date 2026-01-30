@@ -333,7 +333,7 @@ async function UpdateBusButton()
         
         if (tripgroup == tripData[0])
         {
-            if (created) 
+            if (created == false) 
             { 
                 const label = document.createElement("label");
                 label.style.border = "1px solid #ccc";
