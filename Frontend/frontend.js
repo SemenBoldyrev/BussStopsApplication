@@ -266,7 +266,7 @@ async function UpdateBusButton()
     if (!selectedRegion || !selectedBusStop) { return; }
 
     //const response = await fetch(`${SERVER}/routes/nonend/longname/${selectedRegion}`);
-    const response = await fetch(`${SERVER}/routes/nonend/longname/${selectedBusStop}`);
+    const response = await fetch(`${SERVER}/routes/nonend/longname/${selectedRegion}`);
     const data = await response.json();
     if (data.length == 0) 
     { 
@@ -295,7 +295,7 @@ async function UpdateBusTimes(routeLongName)
 {
 
     busTimesDiv.innerHTML = "";
-    const tmpresponse = await fetch(`${SERVER}/trips/longname/${routeLongName}`);
+    const tmpresponse = await fetch(`${SERVER}/trips/rid/${routeLongName}`);
     const tmpdata = await tmpresponse.json();
 
     if (tmpdata.length == 0) { return; }
@@ -332,7 +332,7 @@ function CreateBusButton(route)
         const button = document.createElement("button");
         button.onclick = () => {
             console.log(`Bus route ${route.route_short_name} selected`);
-            UpdateBusTimes(route.route_long_name);
+            UpdateBusTimes(route.route_id);
         }
         button.style.cursor = "pointer";
         button.style.border = "1px solid #ccc";
