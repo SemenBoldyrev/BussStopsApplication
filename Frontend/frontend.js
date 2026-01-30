@@ -331,10 +331,17 @@ async function UpdateBusTimes(tripid)
 
     busTimesDiv.innerHTML = "";
 
-    const response = await fetch(`${SERVER}/stop_times/tripid/${tripid}/stopid/${stopId}`);
-    const data = await response.json();
+    var data = null;
+    stopId.forEach(async stopid => {
+        const response = await fetch(`${SERVER}/stop_times/tripid/${tripid}/stopid/${stopid}`);
+        const tmpdata = await response.json();
+        if (tmpdata.length != 0) 
+        { 
+            data = tmpdata;
+        }
+    });
 
-    if (data.length == 0) 
+    if (data.length == null) 
     { 
         const label = document.createElement("label");
         label.style.border = "1px solid #ccc";
