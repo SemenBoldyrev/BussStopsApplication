@@ -37,6 +37,7 @@ var tBusStops = ["Stop 1", "Stop 2", "Stop 3"];
 var selectedRegion = null;
 var selectedBusStop = null;
 var stopId = null;
+var redactedRegionName = null;
 
 document.addEventListener("DOMContentLoaded", () =>{
 });
@@ -73,8 +74,9 @@ locButton.addEventListener("click", () => {
 busStopButton.addEventListener("click", () => {
     console.log("Bus stop button clicked");
     const busStopName = busStopInput.value;
+    RedactRegionName(selectedRegion);
 
-    busStopExists(busStopName).then(exists => {
+    busStopExists(redactedRegionName).then(exists => {
         if (exists) {
             infoHead.textContent = " ";
             selectedBusStop = busStopName;
@@ -271,7 +273,7 @@ async function UpdateBusButton()
 
     if (tmpdata.length == 0) { return; }
 
-    const tripResponse = await fetch(`${SERVER}/trips/longname/unique/${selectedBusStop}`);
+    const tripResponse = await fetch(`${SERVER}/trips/longname/unique/${redactedRegionName}`);
     const tripData = await tripResponse.json();
 
     if (tripData.length == 0) 
@@ -298,8 +300,12 @@ async function UpdateBusButton()
         var trip = tripgroup;
         const busRoutesResponse = await fetch(`${SERVER}/routes/rid/${trip.route_id}`);
         const busRoutesData = await busRoutesResponse.json();
+
+        const busTimesResponse = await fetch(`${SERVER}/stop_times/tripid/${trip.trip_id}`);
+        const busTimesData = await busTimesResponse.json();
+
         console.log("lng =", busRoutesData.length);
-        if (busRoutesData.length != 0) 
+        if (busRoutesData.length != 0 && busTimesData.length != 0) 
             { 
                 var route = busRoutesData[0];
                 CreateBusButton(trip, route);
@@ -438,4 +444,10 @@ async function AutoFind(lon, lat)
     UpdateBusButton()
 
     MainVisController(true,true,true)
+}
+
+function RedactRegionName(name)
+{
+    var namelst = name.split(" ");
+    redactedRegionName = namelst[0];
 }
