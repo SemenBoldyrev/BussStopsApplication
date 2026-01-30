@@ -301,6 +301,7 @@ async function UpdateBusButton()
         const busRoutesResponse = await fetch(`${SERVER}/routes/rid/${trip.route_id}`);
         const busRoutesData = await busRoutesResponse.json();
 
+        console.log(`trip ID: ${trip.trip_id}`);
         const busTimesResponse = await fetch(`${SERVER}/stop_times/tripid/${trip.trip_id}/stopid/${stopId}`);
         const busTimesData = await busTimesResponse.json();
 
