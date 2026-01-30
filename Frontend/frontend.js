@@ -36,7 +36,7 @@ var tBusStops = ["Stop 1", "Stop 2", "Stop 3"];
 
 var selectedRegion = null;
 var selectedBusStop = null;
-var stopId = null;
+var stopId = [];
 var redactedRegionName = null;
 
 document.addEventListener("DOMContentLoaded", () =>{
@@ -294,20 +294,28 @@ async function UpdateBusButton()
 
     console.log("Updating bus buttons...");
 
-    stopId = tmpdata[0].stop_id;
+    var busStopsList = [];
+    tmpdata.forEach(stop => {
+        busStopsList.push(stop.stop_id);
+    });
+
+    stopId = busStopsList;
     console.log(`Identified stop ID: ${stopId}`);
     tripData.forEach(async tripgroup => {
         var trip = tripgroup;
         const busRoutesResponse = await fetch(`${SERVER}/routes/rid/${trip.route_id}`);
         const busRoutesData = await busRoutesResponse.json();
 
-        const busTimesResponse = await fetch(`${SERVER}/stop_times/tripid/${trip.trip_id}/stopid/${stopId}`);
-        const busTimesData = await busTimesResponse.json();
+        stopId.forEach(async stopid => {
+            const busTimesResponse = await fetch(`${SERVER}/stop_times/tripid/${trip.trip_id}/stopid/${stopid}`);
+            const busTimesData = await busTimesResponse.json();
+            if (busTimesData.length != 0) 
+            { 
+                trip = tripgroup;
+            }
+        });
 
-        console.log(`trip ID: ${trip.trip_id}`);
-        console.log("lng =", busRoutesData.length, busTimesData.length);
-        console.log(busRoutesData.length != 0 && busTimesData.length != 0);
-        if (busRoutesData.length != 0 && busTimesData.length != 0) 
+        if (busRoutesData.length != 0) 
             { 
                 var route = busRoutesData[0];
                 CreateBusButton(trip, route);
