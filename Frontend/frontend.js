@@ -307,7 +307,7 @@ async function UpdateBusTimes(routeLongId)
 
     if (tmpdata.length == 0) { return; }
 
-    const response = await fetch(`${SERVER}/stop_times/tripid/${tmpdata[0].trip_id}/stopid/${stopId}`);
+    const response = await fetch(`${SERVER}/stop_times/tripid/${tmpdata[0].trip_id}`);
     const data = await response.json();
 
     if (data.length == 0) 
