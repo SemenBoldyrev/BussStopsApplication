@@ -306,41 +306,42 @@ async function UpdateBusButton()
         const busRoutesResponse = await fetch(`${SERVER}/routes/rid/${tripgroup.route_id}`);
         const busRoutesData = await busRoutesResponse.json();
 
-        var trip = null;
+        var tmpstopid = 0;
         stopId.forEach( async stopid => {
             const busTimesResponse =  await fetch(`${SERVER}/stop_times/tripid/${tripgroup.trip_id}/stopid/${stopid}`);
             const busTimesData = await busTimesResponse.json();
             if (busTimesData.length != 0) 
             { 
                 console.log(`Found matching trip: ${tripgroup.trip_long_name}`);
-                trip = tripgroup;
+                tmpstopid = stopid;
             }
         });////
-        console.log(busRoutesData.length != 0, trip);
-        if (busRoutesData.length != 0 && trip != null) 
+        if (busRoutesData.length != 0 && stopid != 0) 
             { 
                 console.log("Creating bus button...");
                 var route = busRoutesData[0];
-                CreateBusButton(trip, route);
+                CreateBusButton(tmpstopid, tripgroup, route);
             }
         
     });
 }
 
-async function UpdateBusTimes(tripid)
+async function UpdateBusTimes(tmpstopid, tripid)
 {
 
     busTimesDiv.innerHTML = "";
 
-    var data = null;
-    stopId.forEach(async stopid => {
-        const response = await fetch(`${SERVER}/stop_times/tripid/${tripid}/stopid/${stopid}`);
-        const tmpdata = await response.json();
-        if (tmpdata.length != 0) 
-        { 
-            data = tmpdata;
-        }
-    });
+    //var data = null;
+    //stopId.forEach(async stopid => {
+    //    const response = await fetch(`${SERVER}/stop_times/tripid/${tripid}/stopid/${tmpstopid}`);
+    //    const tmpdata = await response.json();
+    //    if (tmpdata.length != 0) 
+    //    { 
+    //        data = tmpdata;
+    //    }
+    //});
+    const response = await fetch(`${SERVER}/stop_times/tripid/${tripid}/stopid/${tmpstopid}`);
+    const data = await response.json();
 
     if (data.length == null) 
     { 
@@ -366,12 +367,12 @@ async function UpdateBusTimes(tripid)
     });
 }
 
-function CreateBusButton(trip,route)
+function CreateBusButton(tmpstopid, trip, route)
 {
         const button = document.createElement("button");
         button.onclick = () => {
             console.log(`Bus route ${route.route_short_name} selected`);
-            UpdateBusTimes(trip.trip_id);
+            UpdateBusTimes(tmpstopid, trip.trip_id);
         }
         button.style.cursor = "pointer";
         button.style.border = "1px solid #ccc";
