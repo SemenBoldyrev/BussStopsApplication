@@ -102,6 +102,12 @@ app.get('/trips/longname/:longname', (req, res) => {
     if (AbsCheck(longName)){SendRequest(query, res);}
 });
 
+app.get('/trips/rid/:rid', (req, res) => {
+    const rid = req.params.rid;
+    const query = `SELECT * FROM ${DatabaseNames.TRIPS} WHERE route_id = '${rid}' LIMIT ${LIMIT}`;
+    if (AbsCheck(rid)){SendRequest(query, res);}
+});
+
 
 
 app.get('/stop_times', (req, res) => {
