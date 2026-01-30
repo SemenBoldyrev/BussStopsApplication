@@ -301,6 +301,7 @@ async function UpdateBusButton()
 
     stopId = busStopsList;
     console.log(`Identified stop ID: ${stopId}`);
+    var created = false;
     tripData.forEach(async tripgroup => {
         
         const busRoutesResponse = await fetch(`${SERVER}/routes/rid/${tripgroup.route_id}`);
@@ -326,9 +327,28 @@ async function UpdateBusButton()
             { 
                 console.log("Creating bus button...");
                 var route = busRoutesData[0];
+                created = true;
                 CreateBusButton(tmpstopid, tripgroup, route);
             }
         
+        if (tripgroup == tripData[0])
+        {
+            if (created) 
+            { 
+                const label = document.createElement("label");
+                label.style.border = "1px solid #ccc";
+                label.style.padding = "10px";
+                label.style.width = "125px";
+                label.disabled = true;
+
+                label.classList.add("btn", "btn-primary", "mb-3", "pe-none");
+                label.ariaDisabled = "true";
+
+                label.innerHTML = `No Busses Found`;
+                busTimesDiv.appendChild(label);
+                return;
+            }
+        }
     });
 }
 
