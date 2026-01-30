@@ -307,7 +307,9 @@ async function UpdateBusButton()
         const busRoutesData = await busRoutesResponse.json();
 
         var tmpstopid = 0;
+        var gate = false;
         stopId.forEach( async stopid => {
+            if (gate) { return; }
             const busTimesResponse =  await fetch(`${SERVER}/stop_times/tripid/${tripgroup.trip_id}/stopid/${stopid}`);
             const busTimesData = await busTimesResponse.json();
             if (busTimesData.length != 0) 
@@ -321,7 +323,7 @@ async function UpdateBusButton()
                 console.log("Creating bus button...");
                 var route = busRoutesData[0];
                 CreateBusButton(tmpstopid, tripgroup, route);
-                return;
+                gate = true;
             }
         });////
         
