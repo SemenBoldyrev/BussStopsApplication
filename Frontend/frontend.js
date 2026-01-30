@@ -310,7 +310,7 @@ async function UpdateBusButton()
         stopId.forEach(async stopid => {
             const busTimesResponse = await fetch(`${SERVER}/stop_times/tripid/${tripgroup.trip_id}/stopid/${stopid}`);
             const busTimesData = await busTimesResponse.json();
-            if (busTimesData.length !== 0) 
+            if (busTimesData.length != 0) 
             { 
                 trip = tripgroup;
                 console.log(`Found trip ${trip.trip_long_name} for stop ID ${stopid}`);
