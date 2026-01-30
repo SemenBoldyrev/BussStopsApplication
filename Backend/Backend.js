@@ -121,6 +121,13 @@ app.get('/stop_times/tripid/:tripid', (req, res) => {
     if (AbsCheck(tripId)){SendRequest(query, res);}
 });
 
+app.get('/stop_times/tripid/:tripid/stopid/:stopid', (req, res) => {
+    const tripId = req.params.tripid;
+    const stopId = req.params.stopid;
+    const query = `SELECT * FROM ${DatabaseNames.STOP_TIMES} WHERE trip_id = ${tripId} AND stop_id = ${stopId} LIMIT ${LIMIT}`;
+    if (AbsCheck(tripId) && AbsCheck(stopId)){SendRequest(query, res);}
+});
+
 
 
 app.get('/routes', (req, res) => {
