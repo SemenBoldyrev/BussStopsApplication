@@ -301,10 +301,10 @@ async function UpdateBusButton()
         const busRoutesResponse = await fetch(`${SERVER}/routes/rid/${trip.route_id}`);
         const busRoutesData = await busRoutesResponse.json();
 
-        console.log(`trip ID: ${trip.trip_id}`);
         const busTimesResponse = await fetch(`${SERVER}/stop_times/tripid/${trip.trip_id}/stopid/${stopId}`);
         const busTimesData = await busTimesResponse.json();
 
+        console.log(`trip ID: ${trip.trip_id}`);
         console.log("lng =", busRoutesData.length, busTimesData.length);
         console.log(busRoutesData.length != 0 && busTimesData.length != 0);
         if (busRoutesData.length != 0 && busTimesData.length != 0) 
