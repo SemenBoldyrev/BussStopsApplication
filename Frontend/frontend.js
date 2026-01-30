@@ -36,6 +36,7 @@ var tBusStops = ["Stop 1", "Stop 2", "Stop 3"];
 
 var selectedRegion = null;
 var selectedBusStop = null;
+var stopId = null;
 
 document.addEventListener("DOMContentLoaded", () =>{
 });
@@ -265,7 +266,11 @@ async function UpdateBusButton()
     busTimesDiv.innerHTML = "";
     if (!selectedRegion || !selectedBusStop) { return; }
 
-    //const response = await fetch(`${SERVER}/routes/nonend/longname/${selectedRegion}`);
+    const tmpresponse = await fetch(`${SERVER}/stops/strict/region/${selectedRegion}/stop/${selectedBusStop}`);
+    const tmpdata = await tmpresponse.json();
+
+    if (tmpdata.length == 0) { return; }
+
     const response = await fetch(`${SERVER}/routes/nonend/longname/${selectedBusStop}`);
     const data = await response.json();
     if (data.length == 0) 
@@ -286,6 +291,7 @@ async function UpdateBusButton()
 
     console.log("Updating bus buttons...");
 
+    stopId = tmpdata[0].stop_id;
     data.forEach(route => {
         CreateBusButton(route);
     });
@@ -300,7 +306,7 @@ async function UpdateBusTimes(routeLongName)
 
     if (tmpdata.length == 0) { return; }
 
-    const response = await fetch(`${SERVER}/stop_times/tripid/${tmpdata[0].trip_id}`);
+    const response = await fetch(`${SERVER}/stop_times/tripid/${tmpdata[0].trip_id}/stopid/${stopId}`);
     const data = await response.json();
 
     if (data.length == 0) 
