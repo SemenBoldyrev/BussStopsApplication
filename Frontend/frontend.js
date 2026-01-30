@@ -308,15 +308,16 @@ async function UpdateBusButton()
 
         var tmpstopid = 0;
         var gate = false;
-        stopId.forEach( async stopid => {
-            if (gate) { return; }
-            const busTimesResponse =  await fetch(`${SERVER}/stop_times/tripid/${tripgroup.trip_id}/stopid/${stopid}`);
-            const busTimesData = await busTimesResponse.json();
-            if (busTimesData.length != 0) 
-            { 
-                console.log(`Found matching trip: ${tripgroup.trip_long_name}`);
-                tmpstopid = stopid;
-            }
+
+        var stopid = stopId[0];
+
+        const busTimesResponse =  await fetch(`${SERVER}/stop_times/tripid/${tripgroup.trip_id}/stopid/${stopid}`);
+        const busTimesData = await busTimesResponse.json();
+        if (busTimesData.length != 0) 
+        { 
+            console.log(`Found matching trip: ${tripgroup.trip_long_name}`);
+            tmpstopid = stopid;
+        }
             console.log(busRoutesData.length, tmpstopid);
             if (busRoutesData.length != 0 && tmpstopid != 0) 
             { 
@@ -325,8 +326,6 @@ async function UpdateBusButton()
                 CreateBusButton(tmpstopid, tripgroup, route);
                 gate = true;
             }
-        });////
-        
         
     });
 }
