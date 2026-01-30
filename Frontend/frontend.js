@@ -321,6 +321,7 @@ async function UpdateBusButton()
                 console.log("Creating bus button...");
                 var route = busRoutesData[0];
                 CreateBusButton(tmpstopid, tripgroup, route);
+                return;
             }
         });////
         
