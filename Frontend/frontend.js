@@ -297,7 +297,7 @@ async function UpdateBusButton()
     tripData.forEach(async trip => {
         const busRoutesResponse = await fetch(`${SERVER}/routes/rid/${trip.route_id}`);
         const busRoutesData = await busRoutesResponse.json();
-
+        console.log("lng =", busRoutesData.length);
         if (busRoutesData.length != 0) 
             { 
                 var route = busRoutesData[0];
