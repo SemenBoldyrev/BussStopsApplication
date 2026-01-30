@@ -303,7 +303,7 @@ async function UpdateBusButton()
     console.log(`Identified stop ID: ${stopId}`);
     tripData.forEach(async tripgroup => {
         
-        const busRoutesResponse = await fetch(`${SERVER}/routes/rid/${trip.route_id}`);
+        const busRoutesResponse = await fetch(`${SERVER}/routes/rid/${tripgroup.route_id}`);
         const busRoutesData = await busRoutesResponse.json();
 
         var trip = null;
