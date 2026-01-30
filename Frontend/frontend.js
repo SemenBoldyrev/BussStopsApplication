@@ -316,7 +316,7 @@ async function UpdateBusButton()
                 tmpstopid = stopid;
             }
         });////
-        if (busRoutesData.length != 0 && stopid != 0) 
+        if (busRoutesData.length != 0 && tmpstopid != 0) 
             { 
                 console.log("Creating bus button...");
                 var route = busRoutesData[0];
