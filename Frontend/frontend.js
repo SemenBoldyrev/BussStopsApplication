@@ -295,7 +295,7 @@ async function UpdateBusButton()
     stopId = tmpdata[tmpdata.length - 1].stop_id;
     console.log(`Identified stop ID: ${stopId}`);
     tripData.forEach(async tripgroup => {
-        var trip = tripgroup[0];
+        var trip = tripgroup;
         const busRoutesResponse = await fetch(`${SERVER}/routes/rid/${trip.route_id}`);
         const busRoutesData = await busRoutesResponse.json();
         console.log("lng =", busRoutesData.length);
