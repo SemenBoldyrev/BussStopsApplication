@@ -267,7 +267,7 @@ async function UpdateBusButton()
 
     if (stopdata.length == 0) { CreateNoBussFound(); return; }
 
-    searchingSign(true);
+    SearchingSign(true);
 
     //based on redacted region name
     console.log("RRN search ->");
@@ -286,7 +286,7 @@ async function UpdateBusButton()
     await CriticalSearchBusses(stopdata);
 
     if (busListDiv.innerHTML == "") { CreateNoBussFound(); }
-    searchingSign(false);
+    SearchingSign(false);
 }
 
 async function SearchBussesByName(name, stopdata, researchTag = "")
