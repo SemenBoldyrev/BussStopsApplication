@@ -267,6 +267,8 @@ async function UpdateBusButton()
 
     if (stopdata.length == 0) { CreateNoBussFound(); return; }
 
+    searchingSign(true);
+
     //based on redacted region name
     console.log("RRN search ->");
     await SearchBussesByName(redactedRegionName, stopdata);
@@ -284,6 +286,7 @@ async function UpdateBusButton()
     await CriticalSearchBusses(stopdata);
 
     if (busListDiv.innerHTML == "") { CreateNoBussFound(); }
+    searchingSign(false);
 }
 
 async function SearchBussesByName(name, stopdata, researchTag = "")
@@ -506,4 +509,15 @@ function RedactRegionName(name)
 {
     var namelst = name.split(" ");
     redactedRegionName = namelst[0];
+}
+
+function SearchingSign(searching)
+{
+    if (searching)
+    {
+        infoHead.textContent = "Searching...";
+    } else
+    {
+        infoHead.textContent = " ";
+    }
 }
