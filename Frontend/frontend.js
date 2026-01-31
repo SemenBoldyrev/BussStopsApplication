@@ -268,16 +268,19 @@ async function UpdateBusButton()
     if (stopdata.length == 0) { CreateNoBussFound(); return; }
 
     //based on redacted region name
+    console.log("RRN search ->");
     await SearchBussesByName(redactedRegionName, stopdata);
 
     if (busListDiv.innerHTML != "") { return; }
 
     //based on stop name
+    console.log("SN search ->");
     await SearchBussesByName(selectedBusStop, stopdata, "[RESEARCH]");
 
     if (busListDiv.innerHTML != "") { return; }
 
     //Maybe they are passing by?
+    console.log("C search ->");
     await CriticalSearchBusses(stopdata);
 
     if (busListDiv.innerHTML == "") { CreateNoBussFound(); }
@@ -324,6 +327,7 @@ async function SearchBussesByName(name, stopdata, researchTag = "")
 
 async function CriticalSearchBusses(stopdata)
 {
+    if (stopdata.length == 0) { console.log("No valid stop data found"); return; }
     for (const data of stopdata)
     {
         const tmpamlresponse = await fetch(`${SERVER}/amalgam/stopid/${data.stop_id}`);
