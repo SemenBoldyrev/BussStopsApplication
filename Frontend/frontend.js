@@ -92,8 +92,8 @@ busStopButton.addEventListener("click", () => {
 
 
 regionInput.addEventListener("input", () => {
-    console.log("Region input changed: " + regionInput.value);
     UpdateRegionDropdown(regionInput.value);
+    MainVisController(true, false, false);
 });
 
 regionInput.onfocus = () => {
@@ -102,7 +102,7 @@ regionInput.onfocus = () => {
 
 
 busStopInput.addEventListener("input", () => {
-    console.log("Bus stop input changed: " + busStopInput.value);
+    MainVisController(true, true, false);
     UpdateStopsDropdown(selectedRegion, busStopInput.value);
 });
 
