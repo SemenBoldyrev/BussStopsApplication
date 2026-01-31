@@ -276,7 +276,7 @@ async function UpdateBusButton()
     {
         const routeResponse = await fetch(`${SERVER}/routes/rid/${trip.route_id}`);
         const routeData = await routeResponse.json();
-        if (routeData.length == 0) {console.log(`${n}-No valid route found`); n++; continue; }
+        if (routeData.length == 0) {console.log(`${n}-No valid route found [routeid == ${trip.route_id}]`); n++; continue; }
 
         //check if stop has times
         var stopid = 0;
@@ -289,7 +289,7 @@ async function UpdateBusButton()
             stopid = stop.stop_id;
             break;
         }
-        if (stopid == 0) {console.log(`${n}-No valid time for stop found`); n++; continue; }
+        if (stopid == 0) {console.log(`${n}-No valid time for stop found [tripid == ${trip.trip_id}, stopid == ${stop.stop_id}]`); n++; continue; }
         //---
 
         const shortname = routeData[0].route_short_name;
