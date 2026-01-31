@@ -138,6 +138,16 @@ app.get('/stop_times/tripid/:tripid/stopid/:stopid', (req, res) => {
     if (AbsCheck(tripId) && AbsCheck(stopId)){SendRequest(query, res);}
 });
 
+app.get('/simple_stop_times/longname/:longname', (req, res) => {
+    const longName = req.params.longname;
+    const query = `SELECT arrival_time, departure_time
+ FROM ${DatabaseNames.STOP_TIMES} AS bst
+ LEFT JOIN ${DatabaseNames.TRIPS} AS bt ON bt.trip_id = bst.trip_id
+ WHERE bt.trip_long_name = '${longName}'
+ GROUP BY bst.trip_id`;
+    if (AbsCheck(longName)){SendRequest(query, res);}
+});
+
 
 
 app.get('/routes', (req, res) => {
