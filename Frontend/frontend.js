@@ -356,7 +356,7 @@ async function CriticalSearchBusses(stopdata)
 
 async function UpdateBusTimes(tripid, stopid)
 {
-
+    SearchingSign(true);
     busTimesDiv.innerHTML = "";
 
     const response = await fetch(`${SERVER}/stop_times/tripid/${tripid}/stopid/${stopid}`);
@@ -374,6 +374,7 @@ async function UpdateBusTimes(tripid, stopid)
     data.forEach(stopTime => {
         CreateBusTimesButton(stopTime);
     });
+    SearchingSign(false);
 }
 
 async function UpdateBusTimeLongname(longname)
