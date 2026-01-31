@@ -262,17 +262,23 @@ async function UpdateBusButton()
     busTimesDiv.innerHTML = "";
     if (!selectedRegion || !selectedBusStop) { return; }
 
-    const tmpresponse = await fetch(`${SERVER}/stops/strict/region/${selectedRegion}/stop/${selectedBusStop}`);
-    const tmpdata = await tmpresponse.json();
+    const stopesponse = await fetch(`${SERVER}/stops/strict/region/${selectedRegion}/stop/${selectedBusStop}`);
+    const stopdata = await stopesponse.json();
 
-    if (tmpdata.length == 0) { CreateNoBussFound(); return; }
+    if (stopdata.length == 0) { CreateNoBussFound(); return; }
 
-    const response = await fetch(`${SERVER}/routes/nonend/longname/${redactedRegionName}`);
+    const response = await fetch(`${SERVER}/trips/longname/unique/${redactedRegionName}`);
     const data = await response.json();
 
-    for (const route of data)
+    for (const trip of data)
     {
-        CreateBusButton(route);
+        const routeResponse = await fetch(`${SERVER}/routes/rid/${trip.route_id}`);
+        const routeData = await routeResponse.json();
+        if (routeData.length == 0) { continue; }
+
+        const shortname = routeData[0].route_short_name;
+        const longname = trip.trip_long_name;
+        CreateBusButton(shortname, longname);
     }
 }
 
@@ -307,12 +313,12 @@ async function UpdateBusTimes(tripid)
     });
 }
 
-function CreateBusButton(route)
+function CreateBusButton(shortname, longname)
 { ///!!!
         const button = document.createElement("button");
         button.onclick = () => {
-            console.log(`Bus route ${route.route_short_name} selected`);
-            UpdateBusTimes(route.route_id);
+            console.log(`Bus route ${shortname} selected`);
+            UpdateBusTimes(trip.route_id);
         }
         button.style.cursor = "pointer";
         button.style.border = "1px solid #ccc";
@@ -322,7 +328,7 @@ function CreateBusButton(route)
 
         button.classList.add("btn", "btn-primary", "mb-3");
         console.log("AAAAB");
-        button.innerHTML = `${busIcon} ${route.route_short_name}<br>${route.route_long_name}`;
+        button.innerHTML = `${busIcon} ${shortname}<br>${longname}`;
         busListDiv.appendChild(button);
 }
 
