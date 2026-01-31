@@ -376,12 +376,33 @@ async function UpdateBusTimes(tripid, stopid)
     });
 }
 
+async function UpdateBusTimeLongname(longname)
+{
+    busTimesDiv.innerHTML = "";
+
+    const response = await fetch(`${SERVER}/simple_stop_times/longname/${longname}`);
+    const data = await response.json();
+
+    if (data.length == null) 
+    { 
+        CreateNoBusTimes();
+        return; 
+    }
+
+    console.log("Updating bus times...");
+    //for confidencce
+    busTimesDiv.innerHTML = "";
+    data.forEach(stopTime => {
+        CreateBusTimesButton(stopTime);
+    });
+}
+
 function CreateBusButton(shortname, longname, tripid, stopid)
 { 
         const button = document.createElement("button");
         button.onclick = () => {
             console.log(`Bus route ${shortname} selected`);
-            UpdateBusTimes(tripid, stopid);
+            UpdateBusTimeLongname(longname);
         }
         button.style.cursor = "pointer";
         button.style.border = "1px solid #ccc";
