@@ -39,12 +39,6 @@ var selectedBusStop = null;
 var stopId = [];
 var redactedRegionName = null;
 
-document.addEventListener("DOMContentLoaded", () =>{
-});
-
-document.addEventListener("close", () =>{
-});
-
 
 regionButton.addEventListener("click", () => {
     console.log("Region button clicked");
@@ -263,7 +257,7 @@ function MainVisController(a,b,c)
 }
 
 async function UpdateBusButton()
-{
+{ ///---
     busListDiv.innerHTML = "";
     busTimesDiv.innerHTML = "";
     if (!selectedRegion || !selectedBusStop) { return; }
@@ -271,73 +265,19 @@ async function UpdateBusButton()
     const tmpresponse = await fetch(`${SERVER}/stops/strict/region/${selectedRegion}/stop/${selectedBusStop}`);
     const tmpdata = await tmpresponse.json();
 
-    if (tmpdata.length == 0) { return; }
+    if (tmpdata.length == 0) { CreateNoBussFound(); return; }
 
-    const tripResponse = await fetch(`${SERVER}/trips/longname/unique/${redactedRegionName}`);
-    const tripData = await tripResponse.json();
+    const response = await fetch(`${SERVER}/routes/nonend/longname/${redactedRegionName}`);
+    const data = await response.json();
 
-    console.log("Updating bus buttons...");
-
-    var busStopsList = [];
-    tmpdata.forEach(stop => {
-        busStopsList.push(stop.stop_id);
-    });
-
-    stopId = busStopsList;
-    console.log(`Identified stop ID: ${stopId}`);
-    var created = false;
-    tripData.forEach(async tripgroup => {
-        
-        const busRoutesResponse = await fetch(`${SERVER}/routes/rid/${tripgroup.route_id}`);
-        const busRoutesData = await busRoutesResponse.json();
-
-        var tmpstopid = 0;
-
-        for (const stopid of stopId)
-        {
-            console.log(`Checking stop ID: ${stopid} for trip ID: ${tripgroup.trip_id}`);
-            const busTimesResponse =  await fetch(`${SERVER}/stop_times/tripid/${tripgroup.trip_id}/stopid/${stopid}`);
-            const busTimesData = await busTimesResponse.json();
-            if (busTimesData.length != 0) 
-            { 
-                console.log(`Found matching stop time for stop ID: ${stopid}`);
-                tmpstopid = stopid;
-                break;
-            }
-        }
-
-            console.log(busRoutesData.length, tmpstopid);
-            if (busRoutesData.length != 0 && tmpstopid != 0) 
-            { 
-                console.log("Creating bus button...");
-                var route = busRoutesData[0];
-                created = true;
-                CreateBusButton(tmpstopid, tripgroup, route);
-            }
-        
-        if (tripgroup == tripData[tripData.length - 1])
-        {
-            if (created == false) 
-            { 
-                const label = document.createElement("label");
-                label.style.border = "1px solid #ccc";
-                label.style.padding = "10px";
-                label.style.width = "125px";
-                label.disabled = true;
-
-                label.classList.add("btn", "btn-primary", "mb-3", "pe-none");
-                label.ariaDisabled = "true";
-
-                label.innerHTML = `No Busses Found`;
-                busListDiv.appendChild(label);
-                return;
-            }
-        }
-    });
+    for (const route of data)
+    {
+        CreateBusButton(route);
+    }
 }
 
-async function UpdateBusTimes(tmpstopid, tripid)
-{
+async function UpdateBusTimes(tripid)
+{///!!!
 
     busTimesDiv.innerHTML = "";
 
@@ -355,17 +295,7 @@ async function UpdateBusTimes(tmpstopid, tripid)
 
     if (data.length == null) 
     { 
-        const label = document.createElement("label");
-        label.style.border = "1px solid #ccc";
-        label.style.padding = "10px";
-        label.style.width = "inherit";
-        label.disabled = true;
-
-        label.classList.add("btn", "btn-danger", "mb-3", "pe-none");
-        label.ariaDisabled = "true";
-
-        label.innerHTML = `No Bus Times Found`;
-        busTimesDiv.appendChild(label);
+        CreateNoBusTimes();
         return; 
     }
 
@@ -377,12 +307,12 @@ async function UpdateBusTimes(tmpstopid, tripid)
     });
 }
 
-function CreateBusButton(tmpstopid, trip, route)
-{
+function CreateBusButton(route)
+{ ///!!!
         const button = document.createElement("button");
         button.onclick = () => {
             console.log(`Bus route ${route.route_short_name} selected`);
-            UpdateBusTimes(tmpstopid, trip.trip_id);
+            UpdateBusTimes(route.route_id);
         }
         button.style.cursor = "pointer";
         button.style.border = "1px solid #ccc";
@@ -392,7 +322,7 @@ function CreateBusButton(tmpstopid, trip, route)
 
         button.classList.add("btn", "btn-primary", "mb-3");
         console.log("AAAAB");
-        button.innerHTML = `${busIcon} ${route.route_short_name}<br>${trip.trip_long_name}`;
+        button.innerHTML = `${busIcon} ${route.route_short_name}<br>${route.route_long_name}`;
         busListDiv.appendChild(button);
 }
 
@@ -416,6 +346,36 @@ function CreateBusTimesButton(stopTime)
         label.innerHTML = `[Today]<br>Arrival : ${stopTime.arrival_time}<br>Departure : ${stopTime.departure_time}`;
     }
     
+    busTimesDiv.appendChild(label);
+}
+
+function CreateNoBussFound()
+{
+    const label = document.createElement("label");
+    label.style.border = "1px solid #ccc";
+    label.style.padding = "10px";
+    label.style.width = "125px";
+    label.disabled = true;
+
+    label.classList.add("btn", "btn-primary", "mb-3", "pe-none");
+    label.ariaDisabled = "true";
+
+    label.innerHTML = `No Busses Found`;
+    busListDiv.appendChild(label);
+}
+
+function CreateNoBusTimes()
+{
+    const label = document.createElement("label");
+    label.style.border = "1px solid #ccc";
+    label.style.padding = "10px";
+    label.style.width = "inherit";
+    label.disabled = true;
+
+    label.classList.add("btn", "btn-danger", "mb-3", "pe-none");
+    label.ariaDisabled = "true";
+
+    label.innerHTML = `No Bus Times Found`;
     busTimesDiv.appendChild(label);
 }
 
