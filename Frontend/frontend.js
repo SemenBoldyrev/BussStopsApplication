@@ -275,6 +275,11 @@ async function UpdateBusButton()
     //based on stop name
     await SearchBussesByName(selectedBusStop, stopdata, "[RESEARCH]");
 
+    if (busListDiv.innerHTML != "") { return; }
+
+    //Maybe they are passing by?
+    await CriticalSearchBusses(stopdata);
+
     if (busListDiv.innerHTML == "") { CreateNoBussFound(); }
 }
 
@@ -317,6 +322,10 @@ async function SearchBussesByName(name, stopdata, researchTag = "")
     }
 }
 
+async function CriticalSearchBusses(stopdata)
+{
+    console.log("----Potential trips found: " + tripdata.length + "[CRT]");
+}
 
 async function UpdateBusTimes(tripid, stopid)
 {

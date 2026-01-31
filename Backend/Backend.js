@@ -163,6 +163,17 @@ app.get('/routes/nonend/longname/:longname', (req, res) => {
     if (AbsCheck(longName)){SendRequest(query, res);}
 });
 
+app.get('/amalgam/stopid/:stopid', (req, res) => {
+    const stopId = req.params.stopid;
+    const query = `SELECT * 
+ FROM ${DatabaseNames.STOP_TIMES} AS bst 
+ LEFT JOIN ${DatabaseNames.TRIPS} AS bt 
+ ON bt.trip_id = bst.trip_id
+ WHERE bst.stop_id = ${stopId}
+ GROUP BY bt.trip_long_name; LIMIT ${LIMIT}`;
+    if (AbsCheck(stopId)){SendRequest(query, res);}
+});
+
 //so database wont die
 function AbsCheck(str)
 {
