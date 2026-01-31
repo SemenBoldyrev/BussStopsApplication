@@ -328,14 +328,16 @@ async function SearchBussesByName(name, stopdata, researchTag = "")
 async function CriticalSearchBusses(stopdata)
 {
     if (stopdata.length == 0) { console.log("No valid stop data found"); return; }
+    var checktmpamldata = [];
     for (const data of stopdata)
     {
         const tmpamlresponse = await fetch(`${SERVER}/amalgam/stopid/${data.stop_id}`);
         const tmpamldata = await tmpamlresponse.json();
         if (tmpamldata.length == 0) { continue; }
+        checktmpamldata = tmpamldata;
     }
-    if (tmpamldata.length == 0) { return; }
-    var amldata = tmpamldata;
+    if (checktmpamldata.length == 0) { return; }
+    var amldata = checktmpamldata;
 
     console.log("----Potential trips found: " + amldata.length + "[CRT]");
     for (const aml of amldata)
