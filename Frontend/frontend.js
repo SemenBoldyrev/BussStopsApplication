@@ -257,7 +257,7 @@ function MainVisController(a,b,c)
 }
 
 async function UpdateBusButton()
-{ ///---
+{ 
     busListDiv.innerHTML = "";
     busTimesDiv.innerHTML = "";
     if (!selectedRegion || !selectedBusStop) { return; }
@@ -267,36 +267,42 @@ async function UpdateBusButton()
 
     if (stopdata.length == 0) { CreateNoBussFound(); return; }
 
-    const response = await fetch(`${SERVER}/trips/longname/unique/${redactedRegionName}`);
-    const data = await response.json();
+    const tripresponse = await fetch(`${SERVER}/trips/longname/unique/${redactedRegionName}`);
+    const tripdata = await tripresponse.json();
 
-    for (const trip of data)
+    for (const trip of tripdata)
     {
         const routeResponse = await fetch(`${SERVER}/routes/rid/${trip.route_id}`);
         const routeData = await routeResponse.json();
         if (routeData.length == 0) { continue; }
 
+        //check if stop has times
+        var stopid = 0;
+        for (const stop of stopdata)
+        {
+            const stopTimesResponse = await fetch(`${SERVER}/stop_times/tripid/${trip.trip_id}/stopid/${stop.stop_id}`);
+            const stopTimesData = await stopTimesResponse.json();
+
+            if (stopTimesData.length == 0) { continue; }
+            stopid = stop.stop_id;
+            break;
+        }
+        if (stopid == 0) { continue; }
+        //---
+
         const shortname = routeData[0].route_short_name;
         const longname = trip.trip_long_name;
-        CreateBusButton(shortname, longname);
+        CreateBusButton(shortname, longname, trip.trip_id, stopid);
     }
 }
 
-async function UpdateBusTimes(tripid)
-{///!!!
+
+async function UpdateBusTimes(tripid, stopid)
+{
 
     busTimesDiv.innerHTML = "";
 
-    //var data = null;
-    //stopId.forEach(async stopid => {
-    //    const response = await fetch(`${SERVER}/stop_times/tripid/${tripid}/stopid/${tmpstopid}`);
-    //    const tmpdata = await response.json();
-    //    if (tmpdata.length != 0) 
-    //    { 
-    //        data = tmpdata;
-    //    }
-    //});
-    const response = await fetch(`${SERVER}/stop_times/tripid/${tripid}/stopid/${tmpstopid}`);
+    const response = await fetch(`${SERVER}/stop_times/tripid/${tripid}/stopid/${stopid}`);
     const data = await response.json();
 
     if (data.length == null) 
@@ -313,12 +319,12 @@ async function UpdateBusTimes(tripid)
     });
 }
 
-function CreateBusButton(shortname, longname)
-{ ///!!!
+function CreateBusButton(shortname, longname, tripid, stopid)
+{ 
         const button = document.createElement("button");
         button.onclick = () => {
             console.log(`Bus route ${shortname} selected`);
-            UpdateBusTimes(trip.route_id);
+            UpdateBusTimes(tripid, stopid);
         }
         button.style.cursor = "pointer";
         button.style.border = "1px solid #ccc";
