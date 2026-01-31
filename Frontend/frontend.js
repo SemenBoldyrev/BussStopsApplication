@@ -286,6 +286,7 @@ async function UpdateBusButton()
     await CriticalSearchBusses(stopdata);
 
     if (busListDiv.innerHTML == "") { CreateNoBussFound(); SearchingSign(false); return; }
+    SearchingSign(false);
 }
 
 async function SearchBussesByName(name, stopdata, researchTag = "")
