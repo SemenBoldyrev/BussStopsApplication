@@ -140,12 +140,13 @@ app.get('/stop_times/tripid/:tripid/stopid/:stopid', (req, res) => {
 
 app.get('/simple_stop_times/longname/:longname', (req, res) => {
     const longName = req.params.longname;
-    const query = `SELECT arrival_time, departure_time
+    const query = `SELECT DISTINCT arrival_time, departure_time
  FROM ${DatabaseNames.STOP_TIMES} AS bst
  LEFT JOIN ${DatabaseNames.TRIPS} AS bt ON bt.trip_id = bst.trip_id
  WHERE bt.trip_long_name = '${longName}'
- GROUP BY bst.arrival_time, bst.trip_id
- LIMIT ${LIMIT}`;
+ GROUP BY bst.trip_id, arrival_time, departure_time
+ LIMIT ${LIMIT}
+`;
     if (AbsCheck(longName)){SendRequest(query, res);}
 });
 
