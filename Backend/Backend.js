@@ -144,8 +144,7 @@ app.get('/simple_stop_times/longname/:longname', (req, res) => {
  FROM ${DatabaseNames.STOP_TIMES} AS bst
  LEFT JOIN ${DatabaseNames.TRIPS} AS bt ON bt.trip_id = bst.trip_id
  WHERE bt.trip_long_name = '${longName}'
- GROUP BY bst.trip_id
- GROUP BY bst.arrival_time
+ GROUP BY bst.trip_id, bst.arrival_time
  LIMIT ${LIMIT}`;
     if (AbsCheck(longName)){SendRequest(query, res);}
 });
