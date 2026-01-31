@@ -270,11 +270,12 @@ async function UpdateBusButton()
     const tripresponse = await fetch(`${SERVER}/trips/longname/unique/${redactedRegionName}`);
     const tripdata = await tripresponse.json();
 
+    console.log("----Potential trips found: " + tripdata.length);
     for (const trip of tripdata)
     {
         const routeResponse = await fetch(`${SERVER}/routes/rid/${trip.route_id}`);
         const routeData = await routeResponse.json();
-        if (routeData.length == 0) { continue; }
+        if (routeData.length == 0) {console.log("--No valid route found"); continue; }
 
         //check if stop has times
         var stopid = 0;
@@ -287,13 +288,16 @@ async function UpdateBusButton()
             stopid = stop.stop_id;
             break;
         }
-        if (stopid == 0) { continue; }
+        if (stopid == 0) {console.log("--No valid time for stop found"); continue; }
         //---
 
         const shortname = routeData[0].route_short_name;
         const longname = trip.trip_long_name;
+        console.log(`--All clear! Creating bus button for ${shortname} - ${longname}`);
         CreateBusButton(shortname, longname, trip.trip_id, stopid);
     }
+    
+    if (busListDiv.innerHTML == "") { CreateNoBussFound(); }
 }
 
 
@@ -333,7 +337,6 @@ function CreateBusButton(shortname, longname, tripid, stopid)
         //button.style.textAlign = "left";
 
         button.classList.add("btn", "btn-primary", "mb-3");
-        console.log("AAAAB");
         button.innerHTML = `${busIcon} ${shortname}<br>${longname}`;
         busListDiv.appendChild(button);
 }
