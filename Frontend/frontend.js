@@ -324,7 +324,25 @@ async function SearchBussesByName(name, stopdata, researchTag = "")
 
 async function CriticalSearchBusses(stopdata)
 {
-    console.log("----Potential trips found: " + tripdata.length + "[CRT]");
+    for (const data of stopdata)
+    {
+        const tmpamlresponse = await fetch(`${SERVER}/amalgam/stopid/${data.stop_id}`);
+        const tmpamldata = await tmpamlresponse.json();
+        if (tmpamldata.length == 0) { continue; }
+    }
+    if (tmpamldata.length == 0) { return; }
+    var amldata = tmpamldata;
+
+    console.log("----Potential trips found: " + amldata.length + "[CRT]");
+    for (const aml of amldata)
+    {
+        const routeresponse = await fetch(`${SERVER}/routes/rid/${aml.route_id}`);
+        const routedata = await routeresponse.json();
+        if (routedata.length == 0) {console.log(`No valid route found [routeid == ${aml.route_id}]`); continue; }
+
+        console.log(`All clear! Creating bus button for ${routedata[0].route_short_name} - ${aml.trip_long_name}`);
+        CreateBusButton(routedata[0].route_short_name, aml.trip_long_name, aml.trip_id, aml.stop_id);
+    }
 }
 
 async function UpdateBusTimes(tripid, stopid)
