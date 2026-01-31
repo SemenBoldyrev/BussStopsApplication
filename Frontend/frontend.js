@@ -273,20 +273,19 @@ async function UpdateBusButton()
     console.log("RRN search ->");
     await SearchBussesByName(redactedRegionName, stopdata);
 
-    if (busListDiv.innerHTML != "") { return; }
+    if (busListDiv.innerHTML != "") { SearchingSign(false); return; }
 
     //based on stop name
     console.log("SN search ->");
     await SearchBussesByName(selectedBusStop, stopdata, "[RESEARCH]");
 
-    if (busListDiv.innerHTML != "") { return; }
+    if (busListDiv.innerHTML != "") { SearchingSign(false);return; }
 
     //Maybe they are passing by?
     console.log("C search ->");
     await CriticalSearchBusses(stopdata);
 
-    if (busListDiv.innerHTML == "") { CreateNoBussFound(); }
-    SearchingSign(false);
+    if (busListDiv.innerHTML == "") { CreateNoBussFound(); SearchingSign(false); return; }
 }
 
 async function SearchBussesByName(name, stopdata, researchTag = "")
