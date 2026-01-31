@@ -270,14 +270,14 @@ async function UpdateBusButton()
     SearchingSign(true);
 
     //based on redacted region name
-    console.log("RRN search ->");
-    await SearchBussesByName(redactedRegionName, stopdata);
+    console.log("SN search ->");
+    await SearchBussesByName(selectedBusStop, stopdata);
 
     if (busListDiv.innerHTML != "") { SearchingSign(false); return; }
 
     //based on stop name
-    console.log("SN search ->");
-    await SearchBussesByName(selectedBusStop, stopdata, "[RESEARCH]");
+    console.log("RNN search ->");
+    await SearchBussesByName(redactedRegionName, stopdata, "[RESEARCH]");
 
     if (busListDiv.innerHTML != "") { SearchingSign(false);return; }
 
