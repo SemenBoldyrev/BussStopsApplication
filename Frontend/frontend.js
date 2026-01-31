@@ -273,18 +273,18 @@ async function UpdateBusButton()
     if (busListDiv.innerHTML != "") { return; }
 
     //based on stop name
-    await SearchBussesByName(selectedBusStop, stopdata);
+    await SearchBussesByName(selectedBusStop, stopdata, "[RESEARCH]");
 
     if (busListDiv.innerHTML == "") { CreateNoBussFound(); }
 }
 
-async function SearchBussesByName(name, stopdata)
+async function SearchBussesByName(name, stopdata, researchTag = "")
 {
     const tripresponse = await fetch(`${SERVER}/trips/longname/unique/${name}`);
     const tripdata = await tripresponse.json();
 
     
-    console.log("----Potential trips found: " + tripdata.length);
+    console.log("----Potential trips found: " + tripdata.length + " " + researchTag);
     var n = 1;
     for (const trip of tripdata)
     {
