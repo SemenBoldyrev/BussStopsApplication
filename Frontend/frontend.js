@@ -280,16 +280,19 @@ async function UpdateBusButton()
 
         //check if stop has times
         let stopid = 0;
+        var dbg = [];
         for (const stop of stopdata)
         {
             const stopTimesResponse = await fetch(`${SERVER}/stop_times/tripid/${trip.trip_id}/stopid/${stop.stop_id}`);
             const stopTimesData = await stopTimesResponse.json();
 
+            dbg.push(stop.stop_id);
+
             if (stopTimesData.length == 0) { continue; }
             stopid = stop.stop_id;
             break;
         }
-        if (stopid == 0) {console.log(`${n}-No valid time for stop found [tripid == ${trip.trip_id}, stopid == ${stop.stop_id}]`); n++; continue; }
+        if (stopid == 0) {console.log(`${n}-No valid time for stop found [tripid == ${trip.trip_id}, stopid == ${dbg.join(", ")}]`); n++; continue; }
         //---
 
         const shortname = routeData[0].route_short_name;
