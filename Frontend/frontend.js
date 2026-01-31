@@ -268,7 +268,19 @@ async function UpdateBusButton()
     if (stopdata.length == 0) { CreateNoBussFound(); return; }
 
     //based on redacted region name
-    const tripresponse = await fetch(`${SERVER}/trips/longname/unique/${redactedRegionName}`);
+    await SearchBussesByName(redactedRegionName, stopdata);
+
+    if (busListDiv.innerHTML != "") { return; }
+
+    //based on stop name
+    await SearchBussesByName(selectedBusStop, stopdata);
+
+    if (busListDiv.innerHTML == "") { CreateNoBussFound(); }
+}
+
+async function SearchBussesByName(name, stopdata)
+{
+    const tripresponse = await fetch(`${SERVER}/trips/longname/unique/${name}`);
     const tripdata = await tripresponse.json();
 
     
@@ -303,46 +315,6 @@ async function UpdateBusButton()
         n++;
         CreateBusButton(shortname, longname, trip.trip_id, stopid);
     }
-
-    if (busListDiv.innerHTML != "") { return; }
-
-    //based on stop name
-    const alttripresponse = await fetch(`${SERVER}/trips/longname/unique/${selectedBusStop}`);
-    const alttripdata = await alttripresponse.json();
-
-    console.log("----Potential trips found [RESEARCH]: " + alttripdata.length);
-    var n = 1;
-    for (const trip of alttripdata)
-    {
-        const routeResponse = await fetch(`${SERVER}/routes/rid/${trip.route_id}`);
-        const routeData = await routeResponse.json();
-        if (routeData.length == 0) {console.log(`${n}-No valid route found [routeid == ${trip.route_id}]`); n++; continue; }
-
-        //check if stop has times
-        let stopid = 0;
-        var dbg = [];
-        for (const stop of stopdata)
-        {
-            const stopTimesResponse = await fetch(`${SERVER}/stop_times/tripid/${trip.trip_id}/stopid/${stop.stop_id}`);
-            const stopTimesData = await stopTimesResponse.json();
-
-            dbg.push(stop.stop_id);
-
-            if (stopTimesData.length == 0) { continue; }
-            stopid = stop.stop_id;
-            break;
-        }
-        if (stopid == 0) {console.log(`${n}-No valid time for stop found [tripid == ${trip.trip_id}, stopid == ${dbg.join(", ")}]`); n++; continue; }
-        //---
-
-        const shortname = routeData[0].route_short_name;
-        const longname = trip.trip_long_name;
-        console.log(`${n}-All clear! Creating bus button for ${shortname} - ${longname}`);
-        n++;
-        CreateBusButton(shortname, longname, trip.trip_id, stopid);
-    }
-
-    if (busListDiv.innerHTML == "") { CreateNoBussFound(); }
 }
 
 
